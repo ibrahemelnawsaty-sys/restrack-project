@@ -32,6 +32,10 @@ class Certificate extends Model
 
     public static function generateNumber(): string
     {
-        return 'RST-' . date('Y') . '-' . strtoupper(substr(uniqid(), -8));
+        do {
+            $number = 'RST-' . date('Y') . '-' . strtoupper(substr(bin2hex(random_bytes(5)), 0, 8));
+        } while (static::where('certificate_number', $number)->exists());
+
+        return $number;
     }
 }

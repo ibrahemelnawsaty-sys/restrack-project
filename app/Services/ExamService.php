@@ -2,10 +2,13 @@
 
 namespace App\Services;
 
+use App\Mail\CertificateIssued;
 use App\Models\Certificate;
 use App\Models\ExamAttempt;
 use App\Models\Level;
 use App\Models\Question;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class ExamService
 {
@@ -78,7 +81,7 @@ class ExamService
             ->exists();
 
         if (!$existingCert) {
-            Certificate::create([
+            $certificate = Certificate::create([
                 'user_id' => $attempt->user_id,
                 'level_id' => $attempt->level_id,
                 'certificate_number' => Certificate::generateNumber(),
@@ -86,6 +89,8 @@ class ExamService
                 'type' => 'level',
                 'issued_at' => now(),
             ]);
+
+            $this->sendCertificateEmail($certificate);
         }
 
         $this->checkFinalCertificate($attempt->user_id);
@@ -108,7 +113,7 @@ class ExamService
                     ->where('type', 'level')
                     ->avg('score');
 
-                Certificate::create([
+                $certificate = Certificate::create([
                     'user_id' => $userId,
                     'level_id' => null,
                     'certificate_number' => Certificate::generateNumber(),
@@ -116,7 +121,21 @@ class ExamService
                     'type' => 'final',
                     'issued_at' => now(),
                 ]);
+
+                $this->sendCertificateEmail($certificate);
             }
+        }
+    }
+
+    private function sendCertificateEmail(Certificate $certificate): void
+    {
+        try {
+            $certificate->loadMissing('user');
+            if ($certificate->user?->email) {
+                Mail::to($certificate->user->email)->send(new CertificateIssued($certificate));
+            }
+        } catch (\Throwable $e) {
+            Log::warning('Certificate email failed: ' . $e->getMessage(), ['certificate_id' => $certificate->id]);
         }
     }
 }

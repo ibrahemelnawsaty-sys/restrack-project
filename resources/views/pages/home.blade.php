@@ -4,7 +4,7 @@
 
 @section('content')
 
-    {{-- Premium glass home — assembled from section partials (restrack-project/design/mockups/03-premium-glass.html).
+    {{-- Premium glass home — assembled from section partials (docs/design/mockups/03-premium-glass.html).
          Each partial is self-contained and inherits $sections, $speakers, $levels, $guidelines, $faqs. --}}
 
     @include('partials.home.hero')

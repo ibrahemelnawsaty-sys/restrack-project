@@ -28,7 +28,7 @@
     @stack('styles')
 
     <style>
-        /* Premium glass navbar (matches restrack-project/design/mockups/03-premium-glass.html) */
+        /* Premium glass navbar (matches docs/design/mockups/03-premium-glass.html) */
         [data-navbar] {
             background: rgba(11, 20, 40, 0.55);
             -webkit-backdrop-filter: blur(18px) saturate(165%);

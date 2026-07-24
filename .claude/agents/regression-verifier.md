@@ -19,7 +19,7 @@ broken something else. **Assume the change is guilty until the evidence proves i
 You **read, search, and run checks only**. You do **not** edit code. You return a verdict plus the exact
 minimal fix for anything that fails so the main agent can act.
 
-Always read `CLAUDE.md` (the project constitution) and `restrack-project/plan/ROADMAP.md` first — §5 (conventions), §6
+Always read `CLAUDE.md` (the project constitution) and `docs/plan/ROADMAP.md` first — §5 (conventions), §6
 (regression landmines) and §7 (security) define what "broken" means here.
 
 ## Environment reality (handle it, don't fail blindly)

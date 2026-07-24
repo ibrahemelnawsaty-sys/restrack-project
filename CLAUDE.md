@@ -28,10 +28,10 @@
 - **Domain:** Bilingual (ar primary, en secondary) medical-research e-learning platform.
 - **National unified number:** 7053567603.
 - **Brand:** Navy `#16264b` + Gold `#af9136`. Gold is the primary accent; navy is the dark base.
-- **Program:** *Research Track Programs (1) — From Beginner to Expert in Medical Research* (3 levels — see `restrack-project/plan/ROADMAP.md`).
+- **Program:** *Research Track Programs (1) — From Beginner to Expert in Medical Research* (3 levels — see `docs/plan/ROADMAP.md`).
 - **Audience scale:** many concurrent students → **light, fast, cache-first** is a hard requirement, not a nice-to-have.
 
-The full, current work order (all requested modifications, the level table, copy strings) lives in **[`restrack-project/plan/ROADMAP.md`](restrack-project/plan/ROADMAP.md)** — treat it as the source of truth for *what* to build. This file governs *how* to build. **All new-project docs, design mockups, and assets live under [`restrack-project/`](restrack-project/).**
+The full, current work order (all requested modifications, the level table, copy strings) lives in **[`docs/plan/ROADMAP.md`](docs/plan/ROADMAP.md)** — treat it as the source of truth for *what* to build. This file governs *how* to build. **All new-project docs, design mockups, and assets live under [`docs/`](docs/).**
 
 ---
 
@@ -245,9 +245,9 @@ Windows/PowerShell note: prefer `php artisan …` / `composer …` (cross-shell)
 
 ## 12. Where to look
 
-- **Project hub (all new-project docs, mockups, design assets):** [`restrack-project/`](restrack-project/)
-- **Product vision & full spec (positioning, personas, features, roles matrix, security/compliance, design system):** [`restrack-project/plan/MASTER_PLAN.md`](restrack-project/plan/MASTER_PLAN.md)
-- **What to build (work order, level table, exact copy strings):** [`restrack-project/plan/ROADMAP.md`](restrack-project/plan/ROADMAP.md)
+- **Project hub (all new-project docs, mockups, design assets):** [`docs/`](docs/)
+- **Product vision & full spec (positioning, personas, features, roles matrix, security/compliance, design system):** [`docs/plan/MASTER_PLAN.md`](docs/plan/MASTER_PLAN.md)
+- **What to build (work order, level table, exact copy strings):** [`docs/plan/ROADMAP.md`](docs/plan/ROADMAP.md)
 - **The strict verifier agent:** [`.claude/agents/regression-verifier.md`](.claude/agents/regression-verifier.md)
 - **Program source PDF:** `C:\Users\b.maher\Downloads\Program 2.pdf`
 

@@ -73,6 +73,7 @@ return [
     'stay_updated' => 'ابقَ على اطلاع',
     'made_with' => 'صُنع بشغف',
     'in_ksa' => 'في المملكة',
+    'program' => 'البرنامج',
     'published' => 'منشور',
     'draft' => 'مسودة',
     'featured' => 'مميز',

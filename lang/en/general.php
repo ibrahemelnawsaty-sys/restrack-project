@@ -73,6 +73,7 @@ return [
     'stay_updated' => 'Stay Updated',
     'made_with' => 'Made with',
     'in_ksa' => 'in KSA',
+    'program' => 'Program',
     'published' => 'Published',
     'draft' => 'Draft',
     'featured' => 'Featured',

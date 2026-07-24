@@ -37,4 +37,15 @@ class HomeController extends Controller
     {
         return view('pages.contact');
     }
+
+    public function program()
+    {
+        $levels = Level::published()
+            ->withCount('lectures')
+            ->with(['lectures' => fn ($q) => $q->published()->ordered()])
+            ->ordered()
+            ->get();
+
+        return view('pages.program', compact('levels'));
+    }
 }

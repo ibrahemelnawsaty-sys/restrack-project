@@ -82,7 +82,7 @@
                         {{ $ctaText }}
                         <svg class="h-[18px] w-[18px] rtl:rotate-180" aria-hidden="true"><use href="#i-arrow"/></svg>
                     </a>
-                    <a href="#program"
+                    <a href="{{ route('program') }}"
                        class="glass-panel inline-flex items-center gap-2 rounded-2xl px-7 py-3.5 text-sm font-extrabold text-white transition hover:text-gold">
                         {{ $isAr ? 'استعرض البرنامج' : 'Explore the program' }}
                         <svg class="h-[18px] w-[18px] rtl:rotate-180" aria-hidden="true"><use href="#i-arrow"/></svg>

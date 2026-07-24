@@ -24,6 +24,7 @@ Route::get('lang/{locale}', function (string $locale) {
 
 // Public pages
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/program', [HomeController::class, 'program'])->name('program');
 Route::get('/speakers', [HomeController::class, 'speakers'])->name('speakers');
 Route::get('/speakers/{slug}', [HomeController::class, 'speakerShow'])->name('speakers.show');
 Route::get('/contact', [HomeController::class, 'contact'])->name('contact');

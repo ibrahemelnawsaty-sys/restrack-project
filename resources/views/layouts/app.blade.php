@@ -68,6 +68,7 @@
                     @php
                         $navLinks = [
                             ['route' => 'home',     'label' => __('general.home')],
+                            ['route' => 'program',  'label' => __('general.program')],
                             ['route' => 'speakers', 'label' => __('general.speakers')],
                             ['route' => 'contact',  'label' => __('general.contact')],
                         ];
@@ -153,6 +154,7 @@
         <div x-show="open" x-transition x-cloak class="lg:hidden border-t border-white/10 bg-navy-dark">
             <div class="space-y-1 px-4 pb-4 pt-3">
                 <a href="{{ route('home') }}" class="block rounded-lg px-3 py-2.5 text-sm text-white/85 hover:bg-white/5 hover:text-gold">{{ __('general.home') }}</a>
+                <a href="{{ route('program') }}" class="block rounded-lg px-3 py-2.5 text-sm text-white/85 hover:bg-white/5 hover:text-gold">{{ __('general.program') }}</a>
                 <a href="{{ route('speakers') }}" class="block rounded-lg px-3 py-2.5 text-sm text-white/85 hover:bg-white/5 hover:text-gold">{{ __('general.speakers') }}</a>
                 <a href="{{ route('contact') }}" class="block rounded-lg px-3 py-2.5 text-sm text-white/85 hover:bg-white/5 hover:text-gold">{{ __('general.contact') }}</a>
                 <a href="{{ route('lang.switch', app()->getLocale() === 'ar' ? 'en' : 'ar') }}" class="block rounded-lg px-3 py-2.5 text-sm text-gold hover:bg-white/5">

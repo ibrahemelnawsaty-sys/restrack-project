@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AnnouncementController;
+use App\Http\Controllers\Admin\AppearanceController;
 use App\Http\Controllers\Admin\ContactMessageController;
 use App\Http\Controllers\Admin\CouponController;
 use App\Http\Controllers\Admin\DashboardController;
@@ -55,6 +56,10 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     // Settings
     Route::get('/settings', [SettingsController::class, 'index'])->name('settings.index');
     Route::put('/settings', [SettingsController::class, 'update'])->name('settings.update');
+
+    // Appearance (header tagline + footer + social — admin-editable)
+    Route::get('/appearance', [AppearanceController::class, 'index'])->name('appearance.index');
+    Route::put('/appearance', [AppearanceController::class, 'update'])->name('appearance.update');
 
     // FAQs
     Route::resource('faqs', FaqController::class)->except('show');

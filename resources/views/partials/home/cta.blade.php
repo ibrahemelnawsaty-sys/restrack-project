@@ -5,7 +5,7 @@
 @php($isAr = app()->getLocale() === 'ar')
 <section class="relative py-20 sm:py-24">
     <div class="mx-auto w-full max-w-6xl px-6">
-        <div class="glass-panel glass-sheen reveal relative isolate overflow-hidden gradient-navy px-6 py-16 text-center sm:px-12 sm:py-20">
+        <div class="glass-sheen reveal relative isolate overflow-hidden rounded-3xl gradient-navy px-6 py-16 text-center shadow-2xl ring-1 ring-gold/20 sm:px-12 sm:py-20">
 
             {{-- aurora orbs (transform/opacity only, decorative) --}}
             <span class="floater animate-float-slow -start-16 -top-16 h-64 w-64"

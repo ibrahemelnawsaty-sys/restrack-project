@@ -8,6 +8,7 @@ use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PaymentWebhookController;
+use App\Http\Controllers\SitemapController;
 use Illuminate\Support\Facades\Route;
 
 // Language switcher
@@ -28,6 +29,7 @@ Route::get('/speakers/{slug}', [HomeController::class, 'speakerShow'])->name('sp
 Route::get('/contact', [HomeController::class, 'contact'])->name('contact');
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 Route::get('/verify/{number}', [CertificateVerificationController::class, 'verify'])->name('certificate.verify');
+Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
 
 // Auth routes
 Route::middleware('guest')->group(function () {

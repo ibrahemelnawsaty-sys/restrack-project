@@ -1,2 +1,8 @@
 User-agent: *
-Disallow:
+Allow: /
+Disallow: /admin
+Disallow: /student
+Disallow: /checkout
+
+# Replace with your absolute production URL, e.g. https://restrack.sa/sitemap.xml
+Sitemap: /sitemap.xml

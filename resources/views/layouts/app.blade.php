@@ -6,6 +6,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     @stack('seo')
     <title>@yield('title', config('app.name', 'Restrack'))</title>
+    @include('partials.seo-head')
 
     {{-- Fonts --}}
     <link rel="preconnect" href="https://fonts.googleapis.com">

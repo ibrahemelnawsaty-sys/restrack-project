@@ -14,7 +14,7 @@ class HomeController extends Controller
     {
         $sections = PageSection::forPage('home')->get()->keyBy('section_key');
         $speakers = Speaker::visible()->featured()->ordered()->limit(6)->get();
-        $levels = Level::published()->ordered()->get();
+        $levels = Level::published()->withCount('lectures')->ordered()->get();
         $guidelines = Guideline::visible()->get();
         $faqs = Faq::visible()->get();
 

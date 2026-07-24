@@ -38,9 +38,9 @@ class SampleDataSeeder extends Seeder
         // Levels
         $levels = [];
         $levelData = [
-            ['title_ar' => 'المستوى الأول', 'title_en' => 'Level 1', 'description_ar' => 'أساسيات البحث العلمي', 'description_en' => 'Research Fundamentals'],
-            ['title_ar' => 'المستوى الثاني', 'title_en' => 'Level 2', 'description_ar' => 'المنهجيات المتقدمة', 'description_en' => 'Advanced Methodologies'],
-            ['title_ar' => 'المستوى الثالث', 'title_en' => 'Level 3', 'description_ar' => 'النشر والتطبيق', 'description_en' => 'Publishing & Application'],
+            ['title_ar' => 'الباحث المبتدئ', 'title_en' => 'Beginner Researcher', 'description_ar' => 'أساسيات البحث الطبي: مقدمة في البحث، أخلاقيات البحث ولجان IRB، البحث في الأدبيات، صياغة الأسئلة البحثية، أنواع الدراسات، وأساسيات التوثيق.', 'description_en' => 'Foundations of Medical Research: introduction to research, research ethics & IRB, literature search, research questions, study types, and referencing basics.'],
+            ['title_ar' => 'الباحث المتوسط', 'title_en' => 'Intermediate Researcher', 'description_ar' => 'تصميم البحث وإدارة البيانات: تصميم الدراسات، طرق المعاينة، جمع البيانات، أساسيات الإحصاء، كتابة المقترح، إدارة البيانات، والتحيّز والعوامل المربكة.', 'description_en' => 'Research Design & Data Management: study design, sampling methods, data collection, statistical basics, proposal writing, data management, and bias & confounding.'],
+            ['title_ar' => 'الباحث الخبير', 'title_en' => 'Expert Researcher', 'description_ar' => 'الكتابة العلمية والنشر: كتابة المخطوطة، اختيار المجلة، مراجعة الأقران، المراجعات المنهجية، أخلاقيات النشر، وأساسيات كتابة المنح.', 'description_en' => 'Scientific Writing & Publication: manuscript writing, journal selection, peer review, systematic reviews, publication ethics, and grant writing basics.'],
         ];
         foreach ($levelData as $i => $data) {
             $levels[] = Level::create(array_merge($data, [
@@ -91,7 +91,7 @@ class SampleDataSeeder extends Seeder
         $faqData = [
             ['question_ar' => 'ما هو برنامج ريسترك؟', 'question_en' => 'What is Restrack?', 'answer_ar' => 'برنامج تدريبي متخصص في البحث العلمي الطبي.', 'answer_en' => 'A specialized training program in medical scientific research.'],
             ['question_ar' => 'كم تكلفة التسجيل؟', 'question_en' => 'How much does it cost?', 'answer_ar' => 'رسوم التسجيل 899 ريال سعودي.', 'answer_en' => 'Registration fee is 899 SAR.'],
-            ['question_ar' => 'هل أحصل على شهادة؟', 'question_en' => 'Do I get a certificate?', 'answer_ar' => 'نعم، تحصل على شهادة معتمدة عند إتمام جميع المستويات.', 'answer_en' => 'Yes, you receive a certified certificate upon completing all levels.'],
+            ['question_ar' => 'هل أحصل على شهادة؟', 'question_en' => 'Do I get a certificate?', 'answer_ar' => 'نعم، تحصل على شهادة إكمال موثّقة عند إتمام جميع المستويات، مع محاولات اختبار لا محدودة.', 'answer_en' => 'Yes, you receive a verified certificate of completion upon finishing all levels, with unlimited exam attempts.'],
             ['question_ar' => 'كم مدة البرنامج؟', 'question_en' => 'How long is the program?', 'answer_ar' => 'الوصول مفتوح ويمكنك التعلم بالسرعة التي تناسبك.', 'answer_en' => 'Access is open and you can learn at your own pace.'],
         ];
         foreach ($faqData as $i => $data) {
@@ -104,13 +104,13 @@ class SampleDataSeeder extends Seeder
             ['name' => 'SCFHS', 'type' => 'national'],
         ];
         foreach ($guidelineData as $i => $data) {
-            Guideline::create(array_merge($data, ['logo' => 'guidelines/placeholder.png', 'display_order' => $i + 1]));
+            Guideline::create(array_merge($data, ['logo' => null, 'display_order' => $i + 1]));
         }
 
         // Page sections for home page
         $homeSections = [
-            ['section_key' => 'hero', 'title_ar' => 'ابدأ رحلتك البحثية', 'title_en' => 'Start Your Research Journey', 'content_ar' => 'برنامج تدريبي متكامل في البحث العلمي الطبي', 'content_en' => 'A comprehensive training program in medical scientific research'],
-            ['section_key' => 'about', 'title_ar' => 'عن البرنامج', 'title_en' => 'About the Program', 'content_ar' => 'ريسترك هو برنامج رائد في تعليم البحث العلمي', 'content_en' => 'Restrack is a leading program in scientific research education'],
+            ['section_key' => 'hero', 'title_ar' => 'Research Track Platform', 'title_en' => 'Research Track Platform', 'subtitle_ar' => 'From Beginner to Expert in Medical Research', 'subtitle_en' => 'From Beginner to Expert in Medical Research', 'content_ar' => '', 'content_en' => ''],
+            ['section_key' => 'about', 'title_ar' => 'منصة احترافية لإتقان البحث الطبي', 'title_en' => 'A professional platform to master medical research', 'content_ar' => 'ريستراك منصة تعليمية احترافية تُنمّي مهارات البحث الطبي عبر برامج منظّمة، وتقود المتعلّمين من مستوى المبتدئ إلى الخبير.', 'content_en' => 'Restrack is a professional learning platform that develops medical research skills through structured programs, guiding learners from beginner to expert levels'],
             ['section_key' => 'cta', 'title_ar' => 'سجل الآن', 'title_en' => 'Register Now', 'content_ar' => 'انضم إلى أكثر من ١٠٠٠ باحث', 'content_en' => 'Join over 1000 researchers'],
         ];
         foreach ($homeSections as $i => $data) {

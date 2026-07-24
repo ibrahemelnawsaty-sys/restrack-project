@@ -16,20 +16,18 @@
         <div class="glass-panel reveal mt-10 px-6 py-8 sm:px-10">
             <div class="flex flex-wrap items-center justify-center gap-x-10 gap-y-8">
                 @foreach($guidelines as $guideline)
-                    @php $logoSrc = Storage::url($guideline->logo); @endphp
-                    @if($guideline->url)
-                        <a href="{{ $guideline->url }}" target="_blank" rel="noopener noreferrer"
-                           class="group block transition duration-500 hover:scale-105"
-                           aria-label="{{ $guideline->name }}">
-                            <img src="{{ $logoSrc }}" alt="{{ $guideline->name }}"
+                    <a class="group block transition duration-500 hover:scale-105"
+                       @if($guideline->url) href="{{ $guideline->url }}" target="_blank" rel="noopener noreferrer" @endif
+                       aria-label="{{ $guideline->name }}">
+                        @if(filled($guideline->logo))
+                            <img src="{{ Storage::url($guideline->logo) }}" alt="{{ $guideline->name }}"
                                  loading="lazy" decoding="async" width="150" height="48"
+                                 onerror="this.style.display='none'"
                                  class="h-12 w-auto max-w-[150px] object-contain opacity-60 grayscale transition duration-500 group-hover:opacity-100 group-hover:grayscale-0">
-                        </a>
-                    @else
-                        <img src="{{ $logoSrc }}" alt="{{ $guideline->name }}"
-                             loading="lazy" decoding="async" width="150" height="48"
-                             class="h-12 w-auto max-w-[150px] object-contain opacity-60 grayscale transition duration-500 hover:opacity-100 hover:grayscale-0">
-                    @endif
+                        @else
+                            <span class="text-ink-soft text-base font-extrabold opacity-70 transition group-hover:text-ink group-hover:opacity-100">{{ $guideline->name }}</span>
+                        @endif
+                    </a>
                 @endforeach
             </div>
         </div>

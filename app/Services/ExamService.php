@@ -30,14 +30,14 @@ class ExamService
             ];
         })->toArray();
 
-        session(['exam_questions' => $questions->pluck('id')->toArray()]);
+        session(["exam_{$level->id}_questions" => $questions->pluck('id')->toArray()]);
 
         return $examQuestions;
     }
 
     public function gradeExam(Level $level, array $answers): array
     {
-        $questionIds = session('exam_questions', []);
+        $questionIds = session("exam_{$level->id}_questions", []);
         $questions = Question::whereIn('id', $questionIds)->get()->keyBy('id');
 
         $correct = 0;
@@ -46,7 +46,8 @@ class ExamService
 
         foreach ($questions as $question) {
             $userAnswer = $answers[$question->id] ?? null;
-            $isCorrect = $userAnswer === $question->correct_answer;
+            $isCorrect = $userAnswer !== null
+                && trim((string) $userAnswer) === trim((string) $question->correct_answer);
             if ($isCorrect) $correct++;
 
             $snapshot[] = [
@@ -62,7 +63,7 @@ class ExamService
         $score = $total > 0 ? round(($correct / $total) * 100, 2) : 0;
         $passed = $score >= $level->passing_score;
 
-        session()->forget('exam_questions');
+        session()->forget("exam_{$level->id}_questions");
 
         return [
             'score' => $score,

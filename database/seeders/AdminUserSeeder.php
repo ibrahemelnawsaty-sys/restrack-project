@@ -35,5 +35,18 @@ class AdminUserSeeder extends Seeder
             ]
         );
         $student->assignRole('student');
+
+        // Give the sample student an active subscription so the student area is previewable.
+        \App\Models\Subscription::firstOrCreate(
+            ['user_id' => $student->id],
+            [
+                'status' => 'active',
+                'payment_gateway' => 'manual',
+                'amount' => 899,
+                'currency' => 'SAR',
+                'activated_at' => now(),
+                'expires_at' => now()->addYear(),
+            ]
+        );
     }
 }

@@ -3,177 +3,217 @@
 @section('title', __('general.dashboard'))
 @section('page-title', __('general.dashboard'))
 
+@php
+    $isAr = app()->getLocale() === 'ar';
+    // Resume target: first unlocked, not-yet-complete level's first lecture.
+    $resume = null;
+    foreach ($levels as $lvl) {
+        $locked = in_array($lvl->id, $lockedLevels ?? []);
+        if (! $locked && ($levelProgress[$lvl->id] ?? 0) < 100) {
+            $resume = $lvl->lectures->sortBy('order')->first();
+            if ($resume) break;
+        }
+    }
+    if (! $resume) {
+        $resume = optional($levels->first())->lectures?->sortBy('order')->first();
+    }
+    $totalLevels = $levels->count();
+@endphp
+
 @section('content')
 
-{{-- ============ WELCOME HERO ============ --}}
-<div class="relative mb-8 overflow-hidden rounded-3xl gradient-navy p-6 text-white shadow-xl lg:p-10">
+{{-- ============ WELCOME HERO (dark aurora glass) ============ --}}
+<div class="reveal relative mb-8 overflow-hidden rounded-[1.75rem] gradient-navy p-6 text-white shadow-2xl lg:p-9">
     <div class="absolute inset-0 bg-grid opacity-20"></div>
-    <div class="floater gradient-gold w-64 h-64 -top-16 -end-16 opacity-30"></div>
-    <div class="stars-bg absolute inset-0"></div>
+    <div class="floater float-soft" style="width:20rem;height:20rem;background:#7c6cfc;inset-block-start:-7rem;inset-inline-end:-5rem;opacity:.28"></div>
+    <div class="floater float-soft" style="width:15rem;height:15rem;background:#10b4a0;inset-block-end:-6rem;inset-inline-start:-3rem;opacity:.22;animation-delay:1.2s"></div>
 
-    <div class="relative grid items-center gap-6 lg:grid-cols-3">
-        <div class="lg:col-span-2 animate-fade-up">
-            <span class="inline-flex items-center gap-2 rounded-full glass px-3 py-1 text-xs text-gold">
-                <span class="h-1.5 w-1.5 rounded-full bg-gold animate-pulse"></span>
+    <div class="relative grid items-center gap-7 lg:grid-cols-[1.4fr_1fr]">
+        {{-- greeting + resume --}}
+        <div>
+            <span class="inline-flex items-center gap-2 rounded-full glass px-3.5 py-1.5 text-xs font-bold text-gold">
+                <span class="h-1.5 w-1.5 rounded-full bg-teal-300" style="box-shadow:0 0 0 3px rgba(45,212,191,.25)"></span>
                 {{ __('general.welcome_back') }}
             </span>
-            <h2 class="mt-3 text-3xl font-extrabold lg:text-4xl">
-                {{ __('general.hello') ?? 'مرحباً' }}, <span class="text-gradient-gold">{{ auth()->user()->name }}!</span>
+            <h2 class="mt-4 text-3xl font-extrabold leading-tight lg:text-4xl">
+                {{ $isAr ? 'مرحباً' : 'Hello' }}، <span class="text-gradient-gold">{{ auth()->user()->name }}</span> 👋
             </h2>
-            <p class="mt-2 text-white/70">{{ __('general.dashboard_subtitle') }}</p>
+            <p class="mt-2 max-w-md text-white/70">
+                {{ $isAr ? 'واصل من حيث توقّفت — كل محاضرة تقرّبك من شهادتك.' : 'Pick up where you left off — every lecture brings you closer to your certificate.' }}
+            </p>
+
+            <div class="mt-6 flex flex-wrap items-center gap-3">
+                @if($resume)
+                    <a href="{{ route('student.lectures.show', $resume->id) }}"
+                       class="btn-magnetic shine-hover gradient-gold inline-flex items-center gap-2 rounded-2xl px-6 py-3.5 text-sm font-extrabold text-navy shadow-lg glow-gold-hover">
+                        <svg class="h-5 w-5"><use href="#i-play"/></svg>
+                        {{ $isAr ? 'واصل التعلّم' : 'Continue learning' }}
+                    </a>
+                @else
+                    <a href="{{ route('student.certificates.index') }}"
+                       class="btn-magnetic shine-hover gradient-gold inline-flex items-center gap-2 rounded-2xl px-6 py-3.5 text-sm font-extrabold text-navy shadow-lg glow-gold-hover">
+                        <svg class="h-5 w-5"><use href="#i-award"/></svg>
+                        {{ $isAr ? 'شهاداتي' : 'My certificates' }}
+                    </a>
+                @endif
+                <a href="{{ route('student.certificates.index') }}"
+                   class="inline-flex items-center gap-2 rounded-2xl border border-white/15 bg-white/5 px-5 py-3.5 text-sm font-bold text-white/90 transition hover:border-gold/40 hover:text-gold">
+                    <svg class="h-5 w-5"><use href="#i-award"/></svg>
+                    {{ __('general.certificates') }}
+                </a>
+            </div>
         </div>
 
-        {{-- Quick stats summary --}}
-        <div class="relative rounded-2xl glass-dark p-5 animate-fade-up delay-200">
-            <p class="text-xs uppercase tracking-wider text-gold/80">{{ __('general.overall_progress') ?? 'التقدم الإجمالي' }}</p>
-            <div class="mt-3 flex items-center gap-4">
-                <div class="relative h-20 w-20 shrink-0">
-                    <svg class="ring-progress h-20 w-20" viewBox="0 0 36 36">
-                        <circle cx="18" cy="18" r="15.915" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="3"/>
-                        <circle cx="18" cy="18" r="15.915" fill="none" stroke="#d4b660" stroke-width="3"
-                                stroke-linecap="round"
+        {{-- overall progress ring --}}
+        <div class="relative rounded-3xl glass-dark p-6">
+            <p class="text-xs font-bold uppercase tracking-[0.18em] text-gold/80">{{ $isAr ? 'تقدّمك الإجمالي' : 'Overall progress' }}</p>
+            <div class="mt-4 flex items-center gap-5">
+                <div class="relative h-28 w-28 shrink-0">
+                    <svg class="h-28 w-28 -rotate-90" viewBox="0 0 36 36" aria-hidden="true">
+                        <defs><linearGradient id="dashRing" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#af9136"/><stop offset="1" stop-color="#f0d48a"/></linearGradient></defs>
+                        <circle cx="18" cy="18" r="15.915" fill="none" stroke="rgba(255,255,255,.12)" stroke-width="3.2"/>
+                        <circle cx="18" cy="18" r="15.915" fill="none" stroke="url(#dashRing)" stroke-width="3.2" stroke-linecap="round"
                                 stroke-dasharray="{{ $overallProgress }}, 100"/>
                     </svg>
                     <div class="absolute inset-0 flex items-center justify-center">
-                        <span class="text-lg font-extrabold text-gold">{{ $overallProgress }}%</span>
+                        <span class="text-2xl font-extrabold text-gold"><span data-counter="{{ $overallProgress }}" data-suffix="%">0%</span></span>
                     </div>
                 </div>
-                <div>
-                    <p class="text-2xl font-extrabold text-white">{{ $completedLectures }}</p>
-                    <p class="text-xs text-white/60">{{ __('general.completed_lectures') }}</p>
+                <div class="space-y-2.5 text-sm">
+                    <div class="flex items-center gap-2 text-white/85"><svg class="h-4 w-4 text-teal-300"><use href="#i-video"/></svg><span><b class="font-extrabold" data-counter="{{ $completedLectures }}">0</b> {{ $isAr ? 'محاضرة مكتملة' : 'lectures done' }}</span></div>
+                    <div class="flex items-center gap-2 text-white/85"><svg class="h-4 w-4 text-violet-300"><use href="#i-check"/></svg><span><b class="font-extrabold" data-counter="{{ $passedExams }}">0</b>/{{ $totalLevels }} {{ $isAr ? 'اختبار مجتاز' : 'exams passed' }}</span></div>
+                    <div class="flex items-center gap-2 text-white/85"><svg class="h-4 w-4 text-gold"><use href="#i-award"/></svg><span><b class="font-extrabold" data-counter="{{ $certificatesCount }}">0</b> {{ __('general.certificates') }}</span></div>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-{{-- ============ STATS GRID ============ --}}
-<div class="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+{{-- ============ STAT CARDS ============ --}}
+<div class="mb-9 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
     @php
         $statsCards = [
-            ['label' => __('general.total_progress'),     'value' => $overallProgress . '%', 'icon' => 'M13 7h8m0 0v8m0-8l-8 8-4-4-6 6', 'g1' => 'from-blue-500',   'g2' => 'to-indigo-600'],
-            ['label' => __('general.completed_lectures'), 'value' => $completedLectures,    'icon' => 'M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z', 'g1' => 'from-emerald-500','g2' => 'to-green-600'],
-            ['label' => __('general.passed_exams'),       'value' => $passedExams,           'icon' => 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4', 'g1' => 'from-purple-500', 'g2' => 'to-pink-600'],
-            ['label' => __('general.certificates'),       'value' => $certificatesCount,     'icon' => 'M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z',  'g1' => 'from-amber-500',  'g2' => 'to-orange-600'],
+            ['label' => $isAr ? 'التقدّم الإجمالي' : 'Overall progress', 'value' => $overallProgress, 'suffix' => '%', 'icon' => 'i-chart',    'grad' => 'linear-gradient(150deg,#7c6cfc,#9d90ff)'],
+            ['label' => $isAr ? 'محاضرات مكتملة'   : 'Completed lectures','value' => $completedLectures, 'suffix' => '', 'icon' => 'i-video',   'grad' => 'linear-gradient(150deg,#10b4a0,#37d9c4)'],
+            ['label' => $isAr ? 'اختبارات مجتازة'  : 'Passed exams',      'value' => $passedExams,       'suffix' => '', 'icon' => 'i-check',   'grad' => 'linear-gradient(150deg,#af9136,#d4b660)'],
+            ['label' => $isAr ? 'شهاداتي'          : 'Certificates',      'value' => $certificatesCount, 'suffix' => '', 'icon' => 'i-award',   'grad' => 'linear-gradient(150deg,#ff7a59,#ff9f45)'],
         ];
     @endphp
-
     @foreach($statsCards as $i => $stat)
-    <div class="group relative overflow-hidden rounded-2xl border border-gray-100 bg-white p-5 shadow-sm card-lift">
-        <div class="absolute -end-6 -top-6 h-28 w-28 rounded-full bg-gradient-to-br {{ $stat['g1'] }} {{ $stat['g2'] }} opacity-10 blur-xl transition group-hover:scale-150"></div>
-        <div class="relative flex items-start justify-between">
-            <div>
-                <p class="text-sm text-gray-500">{{ $stat['label'] }}</p>
-                <p class="mt-2 text-3xl font-extrabold text-navy">{{ $stat['value'] }}</p>
-            </div>
-            <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br {{ $stat['g1'] }} {{ $stat['g2'] }} text-white shadow-md transition group-hover:scale-110 group-hover:rotate-6">
-                <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="{{ $stat['icon'] }}"/></svg>
+        <div class="reveal shine-hover group relative overflow-hidden rounded-2xl border border-gray-100 bg-white p-5 shadow-[0_4px_18px_-8px_rgba(22,38,75,.18)] transition hover:-translate-y-1 hover:shadow-[0_18px_40px_-16px_rgba(22,38,75,.28)]"
+             style="transition-delay: {{ $i * 0.07 }}s">
+            <div class="flex items-start justify-between">
+                <div>
+                    <p class="text-sm text-gray-500">{{ $stat['label'] }}</p>
+                    <p class="mt-2 text-3xl font-extrabold text-navy" style="font-variant-numeric:tabular-nums">
+                        <span data-counter="{{ $stat['value'] }}" data-suffix="{{ $stat['suffix'] }}">0{{ $stat['suffix'] }}</span>
+                    </p>
+                </div>
+                <span class="grid h-12 w-12 place-items-center rounded-2xl text-white shadow-md transition duration-500 group-hover:scale-110 group-hover:-rotate-6"
+                      style="background: {{ $stat['grad'] }}">
+                    <svg class="h-6 w-6"><use href="#{{ $stat['icon'] }}"/></svg>
+                </span>
             </div>
         </div>
-        <div class="mt-4 flex items-center gap-1 text-xs text-gray-400">
-            <svg class="h-3 w-3 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path d="M3.293 9.707a1 1 0 010-1.414l6-6a1 1 0 011.414 0l6 6a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L4.707 9.707a1 1 0 01-1.414 0z"/></svg>
-            <span>{{ __('general.keep_going') ?? 'استمر في التقدم' }}</span>
-        </div>
-    </div>
     @endforeach
 </div>
 
-{{-- ============ LEVELS ============ --}}
-<div class="mb-6 flex items-center justify-between">
-    <div>
-        <h3 class="text-2xl font-extrabold text-navy">{{ __('general.your_levels') }}</h3>
-        <p class="mt-1 text-sm text-gray-500">{{ __('general.your_levels_subtitle') ?? 'تابع تقدمك في كل مستوى' }}</p>
+{{-- ============ LEARNING PATH ============ --}}
+<div class="mb-6 flex items-end justify-between gap-4">
+    <div class="reveal">
+        <h3 class="text-2xl font-extrabold text-navy">{{ $isAr ? 'مسار التعلّم' : 'Your learning path' }}</h3>
+        <p class="mt-1 text-sm text-gray-500">{{ $isAr ? 'تابع تقدّمك في كل مستوى وافتح التالي بالنجاح.' : 'Track each level and unlock the next by passing its exam.' }}</p>
     </div>
-    <a href="#" class="hidden text-sm font-semibold text-gold hover:text-gold-dark sm:inline-flex items-center gap-1">
-        {{ __('general.view_all') ?? 'عرض الكل' }}
-        <svg class="h-4 w-4 rtl:rotate-180" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+    <a href="{{ route('program') }}" class="hidden shrink-0 items-center gap-1 text-sm font-bold text-gold hover:text-gold-dark sm:inline-flex">
+        {{ $isAr ? 'تفاصيل البرنامج' : 'Program details' }}
+        <svg class="h-4 w-4 rtl:rotate-180"><use href="#i-arrow"/></svg>
     </a>
 </div>
 
 <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-    @foreach($levels as $level)
-    @php
-        $progress = $levelProgress[$level->id] ?? 0;
-        $isLocked = isset($lockedLevels) && in_array($level->id, $lockedLevels);
-        $passed = $passedLevelIds->contains($level->id);
-    @endphp
-    <div class="group relative overflow-hidden rounded-2xl bg-white shadow-sm card-lift {{ $isLocked ? 'opacity-70' : '' }}">
-        {{-- Top color band --}}
-        <div class="absolute inset-x-0 top-0 h-1 {{ $passed ? 'bg-green-500' : ($isLocked ? 'bg-gray-300' : 'gradient-gold') }}"></div>
+    @foreach($levels as $i => $level)
+        @php
+            $progress = $levelProgress[$level->id] ?? 0;
+            $isLocked = in_array($level->id, $lockedLevels ?? []);
+            $passed   = $passedLevelIds->contains($level->id);
+            $ringColor = $passed ? '#12b39b' : ($isLocked ? '#cbd5e1' : '#af9136');
+            $firstLecture = $level->lectures->sortBy('order')->first();
+        @endphp
+        <div class="reveal shine-hover group relative overflow-hidden rounded-3xl bg-white p-6 shadow-[0_4px_18px_-8px_rgba(22,38,75,.16)] transition duration-500 hover:-translate-y-1.5 hover:shadow-[0_22px_50px_-18px_rgba(22,38,75,.30)] {{ $isLocked ? 'opacity-80' : '' }}"
+             style="transition-delay: {{ $i * 0.08 }}s">
+            <div class="absolute inset-x-0 top-0 h-1.5" style="background: {{ $passed ? '#12b39b' : ($isLocked ? '#e5e7eb' : 'linear-gradient(90deg,#af9136,#d4b660)') }}"></div>
 
-        <div class="p-6">
             <div class="flex items-start justify-between">
-                <div class="relative">
-                    <div class="absolute inset-0 rounded-2xl gradient-gold opacity-0 blur-md transition group-hover:opacity-60"></div>
-                    <span class="relative flex h-14 w-14 items-center justify-center rounded-2xl
-                                 {{ $passed ? 'bg-green-100 text-green-700' : ($isLocked ? 'bg-gray-100 text-gray-400' : 'gradient-gold text-navy') }}
-                                 text-xl font-black shadow-lg">
-                        {{ $level->order }}
-                    </span>
+                {{-- progress ring with level number --}}
+                <div class="relative h-16 w-16 shrink-0">
+                    <svg class="h-16 w-16 -rotate-90" viewBox="0 0 36 36" aria-hidden="true">
+                        <circle cx="18" cy="18" r="15.915" fill="none" stroke="#eef1f6" stroke-width="3.4"/>
+                        <circle cx="18" cy="18" r="15.915" fill="none" stroke="{{ $ringColor }}" stroke-width="3.4" stroke-linecap="round"
+                                stroke-dasharray="{{ max($progress, $passed ? 100 : $progress) }}, 100"/>
+                    </svg>
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        @if($isLocked)
+                            <svg class="h-6 w-6 text-gray-400"><use href="#i-lock"/></svg>
+                        @elseif($passed)
+                            <svg class="h-7 w-7 text-teal-500"><use href="#i-award"/></svg>
+                        @else
+                            <span class="text-lg font-black text-navy" style="font-variant-numeric:tabular-nums">{{ $level->order }}</span>
+                        @endif
+                    </div>
                 </div>
 
                 @if($passed)
-                    <span class="inline-flex items-center gap-1 rounded-full bg-green-100 px-3 py-1 text-xs font-bold text-green-700">
-                        <svg class="h-3 w-3" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-                        {{ __('general.passed') }}
-                    </span>
+                    <span class="inline-flex items-center gap-1.5 rounded-full bg-teal-50 px-3 py-1 text-xs font-bold text-teal-700"><svg class="h-3.5 w-3.5"><use href="#i-check"/></svg>{{ __('general.passed') }}</span>
                 @elseif($isLocked)
-                    <span class="inline-flex items-center gap-1 rounded-full bg-gray-100 px-3 py-1 text-xs font-bold text-gray-500">
-                        <svg class="h-3 w-3" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
-                        {{ __('general.locked') }}
-                    </span>
+                    <span class="inline-flex items-center gap-1.5 rounded-full bg-gray-100 px-3 py-1 text-xs font-bold text-gray-500"><svg class="h-3.5 w-3.5"><use href="#i-lock"/></svg>{{ __('general.locked') }}</span>
                 @else
-                    <span class="inline-flex items-center gap-1 rounded-full bg-gold/10 px-3 py-1 text-xs font-bold text-gold-dark">
-                        <span class="h-1.5 w-1.5 rounded-full bg-gold animate-pulse"></span>
-                        {{ __('general.in_progress') ?? 'قيد التقدم' }}
-                    </span>
+                    <span class="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-bold text-gold-dark" style="background:rgba(175,145,54,.12)"><span class="h-1.5 w-1.5 rounded-full bg-gold animate-pulse"></span>{{ $isAr ? 'قيد التقدّم' : 'In progress' }}</span>
                 @endif
             </div>
 
-            <h4 class="mt-5 text-lg font-bold text-navy">{{ $level->title }}</h4>
-            <p class="mt-1 flex items-center gap-1.5 text-xs text-gray-500">
-                <svg class="h-3.5 w-3.5 text-gold" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
-                {{ $level->lectures->count() }} {{ __('general.lectures') }}
+            <h4 class="mt-5 text-lg font-extrabold text-navy">{{ $level->title }}</h4>
+            <p class="mt-1.5 flex items-center gap-1.5 text-xs text-gray-500">
+                <svg class="h-4 w-4 text-violet-500"><use href="#i-video"/></svg>
+                {{ $level->lectures->count() }} {{ $isAr ? 'محاضرة مسجّلة' : 'recorded lectures' }}
+                <span class="mx-1 text-gray-300">·</span>
+                <svg class="h-4 w-4 text-teal-500"><use href="#i-infinity"/></svg>
+                {{ $level->passing_score ?? 70 }}% {{ $isAr ? '(محاولات لا محدودة)' : '(unlimited)' }}
             </p>
 
-            {{-- Progress bar --}}
+            {{-- progress bar --}}
             <div class="mt-5">
-                <div class="flex items-center justify-between text-xs font-semibold">
-                    <span class="text-gray-600">{{ __('general.progress') }}</span>
-                    <span class="text-navy">{{ $progress }}%</span>
+                <div class="mb-1.5 flex items-center justify-between text-xs font-semibold">
+                    <span class="text-gray-500">{{ __('general.progress') }}</span>
+                    <span class="text-navy" style="font-variant-numeric:tabular-nums">{{ $progress }}%</span>
                 </div>
-                <div class="mt-2 h-2.5 overflow-hidden rounded-full bg-gray-100">
-                    <div class="h-full rounded-full {{ $passed ? 'bg-green-500' : 'gradient-gold' }} transition-all duration-700"
-                         style="width: {{ $progress }}%; background-size: 200% auto;"></div>
+                <div class="h-2.5 overflow-hidden rounded-full bg-gray-100">
+                    <div class="h-full rounded-full transition-all duration-1000" style="width: {{ $progress }}%; background: {{ $passed ? '#12b39b' : 'linear-gradient(90deg,#af9136,#d4b660)' }}"></div>
                 </div>
             </div>
 
-            @if(!$isLocked)
+            {{-- actions --}}
+            @if(! $isLocked)
                 <div class="mt-5 flex gap-2">
-                    @php $firstLecture = $level->lectures->sortBy('order')->first(); @endphp
                     @if($firstLecture)
-                    <a href="{{ route('student.lectures.show', $firstLecture->id) }}"
-                       class="btn-magnetic flex-1 inline-flex items-center justify-center gap-1.5 rounded-xl bg-navy py-2.5 text-xs font-bold text-white transition hover:bg-navy-light">
-                        <svg class="h-4 w-4 text-gold" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                        {{ __('general.continue_learning') }}
-                    </a>
-                    @endif
-                    @if($progress >= 100)
-                        <a href="{{ route('student.exams.show', $level->id) }}"
-                           class="btn-magnetic inline-flex items-center gap-1.5 rounded-xl gradient-gold px-4 py-2.5 text-xs font-bold text-navy glow-gold-hover">
-                            <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
-                            {{ __('general.take_exam') }}
+                        <a href="{{ route('student.lectures.show', $firstLecture->id) }}"
+                           class="btn-magnetic inline-flex flex-1 items-center justify-center gap-1.5 rounded-xl bg-navy py-2.5 text-xs font-bold text-white transition hover:bg-navy-light">
+                            <svg class="h-4 w-4 text-gold"><use href="#i-play"/></svg>
+                            {{ $isAr ? 'المحاضرات' : 'Lectures' }}
                         </a>
                     @endif
+                    <a href="{{ route('student.exams.show', $level->id) }}"
+                       class="btn-magnetic inline-flex items-center gap-1.5 rounded-xl px-4 py-2.5 text-xs font-extrabold text-navy glow-gold-hover {{ $progress >= 100 ? 'gradient-gold' : 'bg-gray-100 text-gray-500' }}">
+                        <svg class="h-4 w-4"><use href="#i-check"/></svg>
+                        {{ __('general.take_exam') }}
+                    </a>
                 </div>
             @else
                 <div class="mt-5 flex items-center gap-2 rounded-xl bg-gray-50 px-4 py-3 text-xs text-gray-500">
-                    <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                    {{ __('general.complete_previous_level') ?? 'أكمل المستوى السابق للوصول إلى هذا المستوى' }}
+                    <svg class="h-4 w-4 shrink-0"><use href="#i-lock"/></svg>
+                    {{ $isAr ? 'أكمل واجتَز المستوى السابق لفتح هذا المستوى.' : 'Pass the previous level to unlock this one.' }}
                 </div>
             @endif
         </div>
-    </div>
     @endforeach
 </div>
 

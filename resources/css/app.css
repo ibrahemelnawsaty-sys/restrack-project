@@ -173,7 +173,7 @@
         animation: none !important;
     }
     .stars-bg::before, .stars-bg::after { animation: none !important; }
-    .reveal { opacity: 1 !important; transform: none !important; }
+    .reveal { opacity: 1 !important; transform: none !important; filter: none !important; }
 }
 
 /* ===== Base ===== */
@@ -352,13 +352,15 @@ body {
 /* Section reveal on scroll (used with IntersectionObserver in JS) */
 .reveal {
     opacity: 0;
-    transform: translateY(30px);
-    transition: opacity .8s ease, transform .8s cubic-bezier(.2,.8,.2,1);
-    will-change: opacity, transform;
+    transform: translateY(42px) scale(.975);
+    filter: blur(6px);
+    transition: opacity .85s cubic-bezier(.2,.8,.2,1), transform .85s cubic-bezier(.2,.8,.2,1), filter .85s ease;
+    will-change: opacity, transform, filter;
 }
 .reveal.is-visible {
     opacity: 1;
-    transform: translateY(0);
+    transform: none;
+    filter: none;
 }
 
 /* Animation helpers */
@@ -532,4 +534,37 @@ body {
 
 @media (prefers-reduced-motion: reduce) {
     .glass-sheen::after, .bn-ico { transition: none !important; }
+}
+
+/* ===================================================================
+   Premium motion utilities — GPU-only (transform/opacity), reduced-motion safe
+   =================================================================== */
+.shine-hover { position: relative; overflow: hidden; }
+.shine-hover::before {
+    content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+    background: linear-gradient(115deg, transparent 34%, rgba(255,255,255,.42) 50%, transparent 66%);
+    transform: translateX(-130%);
+}
+.shine-hover:hover::before { animation: rt-shine .85s ease; }
+@keyframes rt-shine { to { transform: translateX(130%); } }
+
+.animate-pop  { animation: rt-pop .55s cubic-bezier(.2,1.35,.35,1) both; }
+@keyframes rt-pop  { from { opacity: 0; transform: scale(.72); } to { opacity: 1; transform: scale(1); } }
+
+.animate-rise { animation: rt-rise .7s cubic-bezier(.2,.8,.2,1) both; }
+@keyframes rt-rise { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
+
+.float-soft { animation: rt-floaty 6s ease-in-out infinite; }
+@keyframes rt-floaty { 50% { transform: translateY(-9px); } }
+
+/* animated conic progress ring fill (set --p: 0..100 inline) */
+.ring-fill {
+    background: conic-gradient(var(--ring-color, #af9136) calc(var(--p, 0) * 1%), rgba(148,163,184,.18) 0);
+    transition: --p 1.2s cubic-bezier(.2,.8,.2,1);
+}
+@property --p { syntax: '<number>'; initial-value: 0; inherits: false; }
+
+@media (prefers-reduced-motion: reduce) {
+    .shine-hover:hover::before, .animate-pop, .animate-rise, .float-soft { animation: none !important; }
+    .ring-fill { transition: none !important; }
 }

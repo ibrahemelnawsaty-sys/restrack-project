@@ -103,21 +103,11 @@
     --ring-track: #edf0f8;
     color-scheme: light;
 }
-@media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) {
-        --canvas: #0d1830;
-        --surface: #16264b;
-        --surface-2: #1d3160;
-        --ink: #f4f1ea;
-        --ink-strong: #ffffff;
-        --muted: #a9b2c3;
-        --hairline: rgba(124, 108, 252, 0.20);
-        --shadow-soft: 0 10px 30px -14px rgba(0, 0, 0, 0.55);
-        --shadow-pop: 0 30px 70px -30px rgba(0, 0, 0, 0.65);
-        --ring-track: #243a63;
-        color-scheme: dark;
-    }
-}
+/* NOTE: auto-following the OS dark preference is intentionally DISABLED for now.
+   The public pages still contain fixed-light backgrounds, so flipping tokens to dark
+   made light text sit on white sections (unreadable). Dark mode will be re-enabled
+   only via an EXPLICIT toggle (:root[data-theme="dark"] below) once every section is
+   fully theme-aware. Until then the site renders consistently light. */
 :root[data-theme="dark"] {
     --canvas: #0d1830;
     --surface: #16264b;

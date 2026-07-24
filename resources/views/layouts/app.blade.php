@@ -17,14 +17,18 @@
     @stack('styles')
 
     <style>
-        [data-navbar].is-scrolled {
-            background-color: rgba(14, 26, 53, 0.85);
-            backdrop-filter: blur(18px);
-            -webkit-backdrop-filter: blur(18px);
-            box-shadow: 0 8px 32px -8px rgba(0,0,0,0.35);
-        }
+        /* Premium glass navbar (matches restrack-project/design/mockups/03-premium-glass.html) */
         [data-navbar] {
-            transition: background-color .3s ease, box-shadow .3s ease, padding .3s ease;
+            background: rgba(11, 20, 40, 0.55);
+            -webkit-backdrop-filter: blur(18px) saturate(165%);
+            backdrop-filter: blur(18px) saturate(165%);
+            border-bottom: 1px solid rgba(212, 180, 90, 0.14);
+            transition: background-color .35s ease, box-shadow .35s ease, border-color .35s ease;
+        }
+        [data-navbar].is-scrolled {
+            background: rgba(9, 16, 33, 0.82);
+            border-bottom-color: rgba(212, 180, 90, 0.24);
+            box-shadow: 0 12px 34px -14px rgba(0, 0, 0, 0.5);
         }
     </style>
 </head>
@@ -46,20 +50,23 @@
     @endif
 
     {{-- Navbar --}}
-    <nav data-navbar class="sticky top-0 z-50 bg-navy" x-data="{ open: false }">
+    <nav data-navbar class="sticky top-0 z-50" x-data="{ open: false }">
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div class="flex h-16 lg:h-20 items-center justify-between">
                 {{-- Logo --}}
                 <a href="{{ route('home') }}" class="group flex items-center gap-3">
-                    <div class="relative">
-                        <div class="absolute inset-0 rounded-xl bg-gold/30 blur-md opacity-0 group-hover:opacity-100 transition"></div>
-                        <div class="relative flex h-10 w-10 items-center justify-center rounded-xl gradient-gold shadow-lg">
-                            <span class="text-lg font-extrabold text-navy">R</span>
-                        </div>
-                    </div>
+                    <span class="relative grid h-11 w-11 place-items-center rounded-2xl bg-white/5 shadow-lg ring-1 ring-gold/25 transition duration-500 group-hover:-rotate-3 group-hover:ring-gold/60">
+                        <span class="absolute inset-0 rounded-2xl bg-gold/25 opacity-0 blur-md transition group-hover:opacity-100"></span>
+                        <svg class="relative h-6 w-6" viewBox="0 0 40 40" aria-hidden="true">
+                            <defs><linearGradient id="rt-navlogo" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#B9932F"/><stop offset="1" stop-color="#8B7CFF"/></linearGradient></defs>
+                            <rect x="6" y="22" width="6" height="12" rx="3" fill="url(#rt-navlogo)"/>
+                            <rect x="17" y="13" width="6" height="21" rx="3" fill="url(#rt-navlogo)"/>
+                            <rect x="28" y="5" width="6" height="29" rx="3" fill="url(#rt-navlogo)"/>
+                        </svg>
+                    </span>
                     <div class="flex flex-col leading-tight">
                         <span class="text-xl font-extrabold text-shimmer">Restrack</span>
-                        <span class="text-[10px] uppercase tracking-[0.2em] text-gold/70 hidden sm:block">{{ optional($siteSettings->get('tagline'))->value ?? 'Learn • Grow • Certify' }}</span>
+                        <span class="hidden text-[10px] font-semibold tracking-wide text-gold/70 sm:block">{{ optional($siteSettings->get('tagline'))->value ?? (app()->getLocale() === 'ar' ? 'مؤسسة ريستراك للتدريب' : 'Research Track Platform') }}</span>
                     </div>
                 </a>
 
@@ -99,7 +106,7 @@
                         <a href="{{ route('login') }}" class="rounded-lg px-4 py-2 text-sm font-medium text-white/85 transition hover:text-gold">
                             {{ __('general.login') }}
                         </a>
-                        <a href="{{ route('register') }}" class="btn-magnetic gradient-gold inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-bold text-navy shadow-lg glow-gold-hover">
+                        <a href="{{ route('register') }}" class="btn-magnetic shine-hover gradient-gold inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-bold text-navy shadow-lg glow-gold-hover">
                             {{ __('general.register') }}
                             <svg class="h-4 w-4 rtl:rotate-180" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
                         </a>

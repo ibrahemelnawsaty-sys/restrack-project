@@ -10,7 +10,7 @@
 
             {{-- heading --}}
             <div class="reveal mx-auto mb-12 max-w-2xl text-center">
-                <span class="pill glass-panel mx-auto mb-4 !px-4 !py-1.5 text-gold">
+                <span class="pill glass-panel mx-auto mb-4 !px-4 !py-1.5 text-gold-ink">
                     <svg class="h-4 w-4" aria-hidden="true"><use href="#i-users"/></svg>
                     {{ $isAr ? 'نخبة من المتحدثين' : 'Our Speakers' }}
                 </span>
@@ -45,7 +45,7 @@
 
                         <h3 class="text-lg font-extrabold text-ink">{{ $speaker->name }}</h3>
                         @if($speaker->title)
-                            <p class="mt-1 text-sm font-semibold text-gold">{{ $speaker->title }}</p>
+                            <p class="mt-1 text-sm font-semibold text-gold-ink">{{ $speaker->title }}</p>
                         @endif
 
                         @php($bio = $isAr ? $speaker->short_bio_ar : $speaker->short_bio_en)

@@ -4,7 +4,7 @@
     <div class="mx-auto max-w-6xl px-6">
 
         <div class="reveal mx-auto max-w-3xl text-center">
-            <span class="inline-flex items-center gap-2 text-xs font-extrabold uppercase tracking-[0.22em] text-gold">
+            <span class="inline-flex items-center gap-2 text-xs font-extrabold uppercase tracking-[0.22em] text-gold-ink">
                 <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><use href="#i-sparkle"/></svg>
                 {{ app()->getLocale() === 'ar' ? 'لماذا ريستراك' : 'Why Restrack' }}
             </span>

@@ -4,6 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    {{-- Day / Night theme — applied before render to avoid a flash of the wrong theme --}}
+    <script>
+        (function(){try{var t=localStorage.getItem('rt-theme')||'light';document.documentElement.setAttribute('data-theme',t);}catch(e){document.documentElement.setAttribute('data-theme','light');}})();
+        function rtToggleTheme(){var r=document.documentElement;var d=r.getAttribute('data-theme')==='dark';r.setAttribute('data-theme',d?'light':'dark');try{localStorage.setItem('rt-theme',d?'light':'dark');}catch(e){}rtPaintTheme();}
+        function rtPaintTheme(){var d=document.documentElement.getAttribute('data-theme')==='dark';document.querySelectorAll('[data-tmoon]').forEach(function(e){e.style.display=d?'none':'';});document.querySelectorAll('[data-tsun]').forEach(function(e){e.style.display=d?'':'none';});}
+        document.addEventListener('DOMContentLoaded',rtPaintTheme);
+    </script>
+    {{-- No-JS fallback: never leave scroll-reveal content invisible if JS fails --}}
+    <noscript><style>.reveal{opacity:1!important;transform:none!important;filter:none!important}[x-cloak]{display:revert!important}</style></noscript>
+
     @stack('seo')
     <title>@yield('title', config('app.name', 'Restrack'))</title>
     @include('partials.seo-head')
@@ -36,18 +47,8 @@
 
     @include('partials.icons')
 
-    {{-- Announcement bar (admin-managed; falls back to the CTA strip when none is active) --}}
-    @if(($announcementBar ?? null))
-        @include('partials.announcement-bar', ['a' => $announcementBar])
-    @else
-        <div class="gradient-gold text-navy text-center text-xs sm:text-sm py-2 px-4 font-medium">
-            <span class="inline-flex items-center gap-2">
-                <svg class="h-4 w-4 animate-pulse-soft" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.539 1.118L10 13.347l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.363-1.118L3.566 7.819c-.783-.57-.38-1.81.589-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                <span>{{ __('general.cta_subtitle') }}</span>
-                <a href="{{ route('register') }}" class="underline font-bold hover:text-navy-dark">{{ __('general.register_now') }} →</a>
-            </span>
-        </div>
-    @endif
+    {{-- Announcement top strip removed — single glass header (matches the mockup).
+         Admin announcements still appear as the popup; the bar can be re-added below the hero later. --}}
 
     {{-- Navbar --}}
     <nav data-navbar class="sticky top-0 z-50" x-data="{ open: false }">
@@ -95,6 +96,13 @@
 
                 {{-- Desktop right side --}}
                 <div class="hidden items-center gap-3 lg:flex">
+                    {{-- Theme toggle (day / night) --}}
+                    <button type="button" onclick="rtToggleTheme()" aria-label="{{ app()->getLocale() === 'ar' ? 'تبديل المظهر' : 'Toggle theme' }}"
+                            class="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-gold/25 text-gold transition hover:border-gold hover:bg-gold/10">
+                        <svg class="h-4 w-4" data-tmoon><use href="#i-moon"/></svg>
+                        <svg class="h-4 w-4" data-tsun style="display:none"><use href="#i-sun"/></svg>
+                    </button>
+
                     {{-- Language switcher --}}
                     <a href="{{ route('lang.switch', app()->getLocale() === 'ar' ? 'en' : 'ar') }}"
                        class="group inline-flex items-center gap-1.5 rounded-lg border border-gold/30 px-3 py-1.5 text-xs font-semibold text-gold transition hover:bg-gold/10 hover:border-gold">
@@ -167,6 +175,12 @@
                 <a href="{{ route('lang.switch', app()->getLocale() === 'ar' ? 'en' : 'ar') }}" class="block rounded-lg px-3 py-2.5 text-sm text-gold hover:bg-white/5">
                     {{ app()->getLocale() === 'ar' ? 'English' : 'عربي' }}
                 </a>
+                <button type="button" onclick="rtToggleTheme()" class="flex w-full items-center gap-2 rounded-lg px-3 py-2.5 text-start text-sm text-gold hover:bg-white/5">
+                    <svg class="h-5 w-5" data-tmoon><use href="#i-moon"/></svg>
+                    <svg class="h-5 w-5" data-tsun style="display:none"><use href="#i-sun"/></svg>
+                    <span data-tmoon>{{ app()->getLocale() === 'ar' ? 'الوضع الليلي' : 'Dark mode' }}</span>
+                    <span data-tsun style="display:none">{{ app()->getLocale() === 'ar' ? 'الوضع النهاري' : 'Light mode' }}</span>
+                </button>
                 @guest
                     <a href="{{ route('login') }}" class="block rounded-lg px-3 py-2.5 text-sm text-white/85 hover:bg-white/5 hover:text-gold">{{ __('general.login') }}</a>
                     <a href="{{ route('register') }}" class="mt-2 block rounded-lg gradient-gold px-3 py-2.5 text-center text-sm font-bold text-navy">{{ __('general.register') }}</a>
@@ -231,9 +245,12 @@
     {{-- Announcement popup (admin-managed) --}}
     @include('partials.announcement-popup', ['a' => $announcementPopup ?? null])
 
-    {{-- Back to top button --}}
-    <button onclick="window.scrollTo({top:0, behavior:'smooth'})"
-            class="fixed bottom-24 end-4 lg:bottom-6 lg:end-6 z-40 flex h-12 w-12 items-center justify-center rounded-full gradient-gold text-navy shadow-2xl glow-gold-hover transition-opacity"
+    {{-- Back to top button — appears only after scrolling down --}}
+    <button x-data="{ up: false }" x-init="up = window.scrollY > 480"
+            @scroll.window.passive="up = window.scrollY > 480"
+            x-show="up" x-cloak x-transition.opacity.duration.250ms
+            onclick="window.scrollTo({top:0, behavior:'smooth'})"
+            class="fixed bottom-24 end-4 lg:bottom-6 lg:end-6 z-40 flex h-12 w-12 items-center justify-center rounded-full gradient-gold text-navy shadow-2xl glow-gold-hover"
             aria-label="back to top">
         <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7"/></svg>
     </button>

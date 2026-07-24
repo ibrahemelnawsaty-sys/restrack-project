@@ -78,7 +78,7 @@
                         <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24"><use href="#i-sparkle"/></svg>
                         <span x-show="!open">{{ $isAr ? 'تفاصيل البرنامج' : 'Read more about the program' }}</span>
                         <span x-show="open" x-cloak>{{ $isAr ? 'إخفاء التفاصيل' : 'Hide details' }}</span>
-                        <svg class="h-4 w-4 transition-transform duration-300" :class="open && '-rotate-90'" fill="none" viewBox="0 0 24 24"><use href="#i-arrow"/></svg>
+                        <svg class="h-4 w-4 rtl:rotate-180 transition-transform duration-300" :class="open && '-rotate-90'" fill="none" viewBox="0 0 24 24"><use href="#i-arrow"/></svg>
                     </button>
 
                     <div x-show="open" x-cloak x-collapse class="border-hair mt-5 border-t pt-5">

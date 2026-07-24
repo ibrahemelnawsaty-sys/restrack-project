@@ -61,14 +61,14 @@
             {{-- ---------- copy column ---------- --}}
             <div class="reveal">
                 {{-- live badge --}}
-                <span class="glass-panel inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-extrabold text-white">
-                    <span class="rt-livedot"></span>
-                    <svg class="h-4 w-4 text-gold" aria-hidden="true"><use href="#i-sparkle"/></svg>
+                <span class="glass-dark flex w-fit max-w-full items-center gap-2 rounded-2xl px-3.5 py-2 text-[11px] font-extrabold leading-snug text-white sm:text-xs">
+                    <span class="rt-livedot flex-none"></span>
+                    <svg class="h-4 w-4 flex-none text-gold" aria-hidden="true"><use href="#i-sparkle"/></svg>
                     {{ $isAr ? 'محاضرات مسجّلة · محتوى محميّ · محاولات لا محدودة' : 'Recorded lectures · Protected content · Unlimited attempts' }}
                 </span>
 
                 <h1 class="mt-5 text-4xl font-extrabold leading-[1.08] tracking-tight sm:text-5xl lg:text-6xl">
-                    <span class="text-gradient-gold sm:whitespace-nowrap">{{ $heroTitle }}</span>
+                    <span class="text-gradient-gold lg:whitespace-nowrap">{{ $heroTitle }}</span>
                 </h1>
 
                 <p class="mt-3 text-xl font-bold text-white sm:text-2xl">{{ $heroSub }}</p>
@@ -83,7 +83,7 @@
                         <svg class="h-[18px] w-[18px] rtl:rotate-180" aria-hidden="true"><use href="#i-arrow"/></svg>
                     </a>
                     <a href="{{ route('program') }}"
-                       class="glass-panel inline-flex items-center gap-2 rounded-2xl px-7 py-3.5 text-sm font-extrabold text-white transition hover:text-gold">
+                       class="glass-dark inline-flex items-center gap-2 rounded-2xl px-7 py-3.5 text-sm font-extrabold text-white transition hover:text-gold">
                         {{ $isAr ? 'استعرض البرنامج' : 'Explore the program' }}
                         <svg class="h-[18px] w-[18px] rtl:rotate-180" aria-hidden="true"><use href="#i-arrow"/></svg>
                     </a>
@@ -91,15 +91,15 @@
 
                 {{-- trust chips --}}
                 <div class="mt-9 flex flex-wrap gap-2.5">
-                    <span class="glass-panel inline-flex items-center gap-2 rounded-full px-3.5 py-2 text-xs font-bold text-white/80">
+                    <span class="glass-dark inline-flex items-center gap-2 rounded-full px-3.5 py-2 text-xs font-bold text-white/80">
                         <svg class="h-4 w-4 text-teal" aria-hidden="true"><use href="#i-video"/></svg>
                         {{ $isAr ? 'محاضرات مسجّلة تُعاد متى شئت' : 'Recorded lectures, rewatch anytime' }}
                     </span>
-                    <span class="glass-panel inline-flex items-center gap-2 rounded-full px-3.5 py-2 text-xs font-bold text-white/80">
+                    <span class="glass-dark inline-flex items-center gap-2 rounded-full px-3.5 py-2 text-xs font-bold text-white/80">
                         <svg class="h-4 w-4 text-teal" aria-hidden="true"><use href="#i-infinity"/></svg>
                         {{ $isAr ? 'محاولات اختبار لا محدودة' : 'Unlimited exam attempts' }}
                     </span>
-                    <span class="glass-panel inline-flex items-center gap-2 rounded-full px-3.5 py-2 text-xs font-bold text-white/80">
+                    <span class="glass-dark inline-flex items-center gap-2 rounded-full px-3.5 py-2 text-xs font-bold text-white/80">
                         <svg class="h-4 w-4 text-teal" aria-hidden="true"><use href="#i-award"/></svg>
                         {{ $isAr ? 'شهادة إكمال موثّقة' : 'Verified certificate of completion' }}
                     </span>
@@ -108,7 +108,7 @@
 
             {{-- ---------- mission-control card (lg+ only) ---------- --}}
             <div class="reveal hidden lg:block">
-                <div class="glass-panel glass-sheen tilt card-lift p-6">
+                <div class="glass-dark glass-sheen tilt card-lift rounded-3xl p-6">
                     <div class="flex items-center justify-between">
                         <b class="text-base font-extrabold text-white">{{ $isAr ? 'لوحتي' : 'My dashboard' }}</b>
                         <span class="text-xs font-semibold text-white/50">{{ $isAr ? 'اليوم' : 'Today' }}</span>
@@ -133,28 +133,28 @@
 
                     {{-- stat chips --}}
                     <div class="mt-4 grid grid-cols-2 gap-2.5">
-                        <div class="glass-panel flex items-center gap-2.5 rounded-2xl px-3 py-2.5">
+                        <div class="glass-dark flex items-center gap-2.5 rounded-2xl px-3 py-2.5">
                             <svg class="h-5 w-5 flex-none text-gold" aria-hidden="true"><use href="#i-flame"/></svg>
                             <div>
                                 <b class="block text-lg font-extrabold leading-tight text-white" data-counter="12" style="font-variant-numeric:tabular-nums">0</b>
                                 <span class="text-[11px] text-white/50">{{ $isAr ? 'يوم متتالٍ' : 'day streak' }}</span>
                             </div>
                         </div>
-                        <div class="glass-panel flex items-center gap-2.5 rounded-2xl px-3 py-2.5">
+                        <div class="glass-dark flex items-center gap-2.5 rounded-2xl px-3 py-2.5">
                             <svg class="h-5 w-5 flex-none text-violet" aria-hidden="true"><use href="#i-chart"/></svg>
                             <div>
                                 <b class="block text-lg font-extrabold leading-tight text-white" data-counter="86" data-suffix="%" style="font-variant-numeric:tabular-nums">0%</b>
                                 <span class="text-[11px] text-white/50">{{ $isAr ? 'متوسط الاختبارات' : 'avg score' }}</span>
                             </div>
                         </div>
-                        <div class="glass-panel flex items-center gap-2.5 rounded-2xl px-3 py-2.5">
+                        <div class="glass-dark flex items-center gap-2.5 rounded-2xl px-3 py-2.5">
                             <svg class="h-5 w-5 flex-none text-teal" aria-hidden="true"><use href="#i-video"/></svg>
                             <div>
                                 <b class="block text-lg font-extrabold leading-tight text-white" data-counter="24" style="font-variant-numeric:tabular-nums">0</b>
                                 <span class="text-[11px] text-white/50">{{ $isAr ? 'محاضرة مكتملة' : 'lectures done' }}</span>
                             </div>
                         </div>
-                        <div class="glass-panel flex items-center gap-2.5 rounded-2xl px-3 py-2.5">
+                        <div class="glass-dark flex items-center gap-2.5 rounded-2xl px-3 py-2.5">
                             <svg class="h-5 w-5 flex-none text-gold" aria-hidden="true"><use href="#i-award"/></svg>
                             <div>
                                 <b class="block text-sm font-extrabold leading-tight text-white">{{ $isAr ? 'شهادتي' : 'Certificate' }}</b>

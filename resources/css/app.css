@@ -188,6 +188,7 @@ html {
 body {
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
+    overflow-x: clip;
 }
 
 /* ===== Selection ===== */
@@ -272,6 +273,12 @@ body {
     background-clip: text;
     -webkit-text-fill-color: transparent;
 }
+
+/* Theme-aware gold text: bright gold on dark surfaces, darker gold on light
+   surfaces (AA contrast for small eyebrow/label text). Use on theme-aware
+   surfaces (glass-panel, canvas) — NOT on always-dark heroes/CTAs. */
+.text-gold-ink { color: var(--color-gold); }
+:root:not([data-theme="dark"]) .text-gold-ink { color: var(--color-gold-dark); }
 
 /* Shimmer text */
 .text-shimmer {
@@ -462,10 +469,12 @@ body {
     overflow: hidden;
     isolation: isolate;
 }
-:root[data-theme="light"] .glass-panel {
-    background: linear-gradient(160deg, rgba(255,255,255,.72), rgba(255,255,255,.45));
-    border-color: rgba(255,255,255,.85);
-    box-shadow: 0 24px 60px -30px rgba(28,40,90,.28), inset 0 1px 0 rgba(255,255,255,.9);
+/* Light frosted card is the DEFAULT (applies unless the theme is explicitly dark),
+   so cards look right even before/without JS setting data-theme. */
+:root:not([data-theme="dark"]) .glass-panel {
+    background: linear-gradient(160deg, rgba(255,255,255,.94), rgba(255,255,255,.78));
+    border-color: rgba(22, 38, 75, 0.08);
+    box-shadow: 0 18px 45px -22px rgba(28, 40, 90, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.9);
 }
 /* moving sheen on hover (the "liquid" feel) */
 .glass-sheen::after {
@@ -512,6 +521,12 @@ body {
     line-height: 1;
     -webkit-tap-highlight-color: transparent;
     transition: color .22s ease;
+}
+.bn-item > span:last-child {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 .bn-ico {
     width: 46px; height: 30px;

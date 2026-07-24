@@ -18,8 +18,8 @@
             Research Track Programs (1)
         </span>
         <h1 class="mt-6 text-4xl font-extrabold leading-tight sm:text-5xl lg:text-6xl reveal">
-            <span class="block text-gradient-gold">From Beginner to Expert</span>
-            <span class="mt-1 block">in Medical Research</span>
+            <span class="block text-gradient-gold">{{ $isAr ? 'من المبتدئ إلى الخبير' : 'From Beginner to Expert' }}</span>
+            <span class="mt-1 block">{{ $isAr ? 'في البحث الطبي' : 'in Medical Research' }}</span>
         </h1>
         <p class="mx-auto mt-6 max-w-2xl text-lg text-white/75 reveal">
             {{ $isAr
@@ -59,7 +59,7 @@
 <section class="bg-canvas py-16 lg:py-24">
     <div class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
         <div class="text-center reveal">
-            <span class="text-xs font-bold uppercase tracking-[0.3em] text-gold">{{ $isAr ? 'محتوى المسار' : 'Track content' }}</span>
+            <span class="text-xs font-bold uppercase tracking-[0.3em] text-gold-ink">{{ $isAr ? 'محتوى المسار' : 'Track content' }}</span>
             <h2 class="mt-3 text-3xl font-extrabold text-ink lg:text-4xl">{{ $isAr ? 'ثلاثة مستويات متدرّجة' : 'Three progressive levels' }}</h2>
         </div>
 

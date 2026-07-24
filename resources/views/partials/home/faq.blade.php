@@ -10,7 +10,7 @@
 
             {{-- heading --}}
             <div class="reveal mx-auto mb-12 max-w-2xl text-center">
-                <span class="pill glass-panel mx-auto mb-4 !px-4 !py-1.5 text-gold">
+                <span class="pill glass-panel mx-auto mb-4 !px-4 !py-1.5 text-gold-ink">
                     <svg class="h-4 w-4" aria-hidden="true"><use href="#i-sparkle"/></svg>
                     {{ $isAr ? 'أسئلة متكررة' : 'Got questions?' }}
                 </span>
@@ -31,7 +31,7 @@
                                   aria-hidden="true">{{ $i + 1 }}</span>
                             <span class="flex-1 text-base font-bold text-ink">{{ $faq->question }}</span>
                             <svg class="h-5 w-5 flex-none text-gold transition-transform duration-300"
-                                 :class="open === {{ $i }} ? 'rotate-90 rtl:-rotate-90' : 'rtl:rotate-180'"
+                                 :class="open === {{ $i }} ? 'rotate-90' : 'rtl:rotate-180'"
                                  aria-hidden="true"><use href="#i-arrow"/></svg>
                         </button>
                         <div x-show="open === {{ $i }}" x-collapse x-cloak>

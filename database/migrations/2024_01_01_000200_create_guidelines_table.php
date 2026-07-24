@@ -11,7 +11,7 @@ return new class extends Migration
         Schema::create('guidelines', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('logo');
+            $table->string('logo')->nullable();
             $table->string('url', 500)->nullable();
             $table->enum('type', ['international', 'national'])->default('international');
             $table->unsignedSmallInteger('display_order')->default(0);
